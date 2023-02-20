@@ -27,6 +27,7 @@ fun main(args: Array<String>) {
     val applicationContext = GenericApplicationContext()
     // 빈 등롤
     applicationContext.registerBean(HelloController::class.java, BeanDefinitionCustomizer {  })
+    applicationContext.registerBean(SimpleHelloService::class.java, BeanDefinitionCustomizer {  })
     // 컨테이너 초기화
     applicationContext.refresh()
 

@@ -1,8 +1,12 @@
 package tobyspring.helloboot
 
-class SimpleHelloService {
+interface HelloService {
+    fun sayHello(name: String): String
+}
 
-    fun sayHello(name: String): String {
+class SimpleHelloService : HelloService {
+
+    override fun sayHello(name: String): String {
         return "Hello $name"
     }
 

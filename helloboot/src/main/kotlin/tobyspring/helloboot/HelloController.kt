@@ -5,13 +5,12 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 //@RestController
-class HelloController {
+class HelloController(
+    private val helloService: HelloService
+) {
 
 //    @GetMapping("/hello")
     fun hello(name: String?): String {
-
-        val helloService = SimpleHelloService()
-
         return name?.let { helloService.sayHello(it) } ?: throw NullPointerException()
     }
 }
