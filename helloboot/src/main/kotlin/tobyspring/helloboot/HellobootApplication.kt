@@ -31,7 +31,12 @@ import javax.servlet.http.HttpServletResponse
 @Configuration
 // 해당 어노테이션이 붙어있는 클래스의 패키지 하위에 있는 클래스중 Component를 찾는다.
 @ComponentScan
-class HellobootApplication
+class HellobootApplication {
+
+    @Bean fun servletWebServerFactory(): ServletWebServerFactory = TomcatServletWebServerFactory()
+
+    @Bean fun dispatcherServlet(): DispatcherServlet = DispatcherServlet()
+}
 
 fun main(args: Array<String>) {
 //    runApplication<HellobootApplication>(*args)
@@ -45,13 +50,13 @@ fun main(args: Array<String>) {
 
             // 스프링 컨테이너가 초기화하는 중에 해당 작업을 실행한다.
             // Spring boot에서 재공
-            val server: ServletWebServerFactory = TomcatServletWebServerFactory()
+            val server: ServletWebServerFactory = getBean(ServletWebServerFactory::class.java)
+            val dispatcherServlet = getBean(DispatcherServlet::class.java)
 
             // spring boot에서 톰캣 외의 다른 Servlet Container도 지원함
             val webServer: WebServer = server.getWebServer(ServletContextInitializer {
-                it.addServlet("dispatcherServlet",
-                    DispatcherServlet(this)
-                ).addMapping("/*")
+                it.addServlet("dispatcherServlet", dispatcherServlet)
+                    .addMapping("/*")
             })
 
             webServer.start()
