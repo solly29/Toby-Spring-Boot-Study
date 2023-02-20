@@ -2,6 +2,7 @@ package tobyspring.helloboot
 
 import org.apache.catalina.startup.Tomcat
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer
+import org.springframework.boot.runApplication
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
 import org.springframework.boot.web.server.WebServer
 import org.springframework.boot.web.servlet.ServletContextInitializer
@@ -23,6 +24,7 @@ import org.springframework.core.io.ResourceLoader
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import kotlin.reflect.KClass
 
 //import org.springframework.boot.autoconfigure.SpringBootApplication
 //import org.springframework.boot.runApplication
@@ -40,30 +42,5 @@ class HellobootApplication {
 
 fun main(args: Array<String>) {
 //    runApplication<HellobootApplication>(*args)
-    // GenericWebApplicationContext 는 자바에서 작성한 config를 읽을 수 없다
-
-    // kotlin 에서는 AnnotationConfigWebApplicationContext가 안된다.......ㅠㅜㅠㅜ
-    val applicationContext = object : AnnotationConfigServletWebApplicationContext() {
-
-        override fun onRefresh() {
-            super.onRefresh()
-
-            // 스프링 컨테이너가 초기화하는 중에 해당 작업을 실행한다.
-            // Spring boot에서 재공
-            val server: ServletWebServerFactory = getBean(ServletWebServerFactory::class.java)
-            val dispatcherServlet = getBean(DispatcherServlet::class.java)
-
-            // spring boot에서 톰캣 외의 다른 Servlet Container도 지원함
-            val webServer: WebServer = server.getWebServer(ServletContextInitializer {
-                it.addServlet("dispatcherServlet", dispatcherServlet)
-                    .addMapping("/*")
-            })
-
-            webServer.start()
-        }
-    }
-    // 빈 등롤
-    applicationContext.register(HellobootApplication::class.java)
-    // 스프링 컨테이너 초기화
-    applicationContext.refresh()
+    run<HellobootApplication>(*args)
 }
