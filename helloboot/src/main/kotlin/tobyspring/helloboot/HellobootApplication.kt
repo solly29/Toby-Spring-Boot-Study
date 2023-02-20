@@ -26,22 +26,27 @@ class HellobootApplication
 fun main(args: Array<String>) {
 //    runApplication<HellobootApplication>(*args)
 
-    val applicationContext = GenericWebApplicationContext()
+    val applicationContext = object : GenericWebApplicationContext() {
+        override fun onRefresh() {
+            super.onRefresh()
+
+            // 스프링 컨테이너가 초기화하는 중에 해당 작업을 실행한다.
+            // Spring boot에서 재공
+            val server: ServletWebServerFactory = TomcatServletWebServerFactory()
+
+            // spring boot에서 톰캣 외의 다른 Servlet Container도 지원함
+            val webServer: WebServer = server.getWebServer(ServletContextInitializer {
+                it.addServlet("dispatcherServlet",
+                    DispatcherServlet(this)
+                ).addMapping("/*")
+            })
+
+            webServer.start()
+        }
+    }
     // 빈 등롤
     applicationContext.registerBean(HelloController::class.java, BeanDefinitionCustomizer {  })
     applicationContext.registerBean(SimpleHelloService::class.java, BeanDefinitionCustomizer {  })
-    // 컨테이너 초기화
+    // 스프링 컨테이너 초기화
     applicationContext.refresh()
-
-    // Spring boot에서 재공
-    val server: ServletWebServerFactory = TomcatServletWebServerFactory()
-
-    // spring boot에서 톰캣 외의 다른 Servlet Container도 지원함
-    val webServer: WebServer = server.getWebServer(ServletContextInitializer {
-        it.addServlet("dispatcherServlet",
-            DispatcherServlet(applicationContext)
-        ).addMapping("/*")
-    })
-
-    webServer.start()
 }
