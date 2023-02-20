@@ -26,6 +26,9 @@ fun main(args: Array<String>) {
 
     // spring boot에서 톰캣 외의 다른 Servlet Container도 지원함
     val webServer: WebServer = server.getWebServer(ServletContextInitializer {
+
+        val helloController = HelloController()
+
         it.addServlet("frontcontroller", object : HttpServlet() {
             override fun service(req: HttpServletRequest?, resp: HttpServletResponse?) {
 
@@ -33,11 +36,13 @@ fun main(args: Array<String>) {
                 if(req?.requestURI == "/hello" && req.method == HttpMethod.GET.name) {
                     val name = req.getParameter("name")
 
+                    val result = helloController.hello(name)
+
                     // 응답
                     resp?.apply {
                         status = HttpStatus.OK.value()
                         setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE)
-                        writer.println("Hello $name")
+                        writer.println(result)
                     }
                 } else if(req?.requestURI == "/user") {
 
