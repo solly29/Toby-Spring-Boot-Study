@@ -29,4 +29,17 @@ class HelloApiTest {
         // body Hello Spring
         Assertions.assertThat(res.body).isEqualTo("Hello Spring")
     }
+
+    @Test
+    fun failsHelloApi() {
+        // http localhost:8080/hello?name=Spring
+
+        val rest = TestRestTemplate()
+
+        val res: ResponseEntity<String> = rest.getForEntity("http://localhost:8080/hello?name=", String::class.java)
+
+        // 검증
+        // status code 200
+        Assertions.assertThat(res.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+    }
 }

@@ -1,12 +1,6 @@
 package tobyspring.helloboot
 
-import org.springframework.context.ApplicationContext
-import org.springframework.context.ApplicationContextAware
-import org.springframework.stereotype.Component
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
@@ -14,13 +8,14 @@ import java.util.*
 
 @RestController
 class HelloController(
-    private val helloService: HelloService,
-    private val applicationContext: ApplicationContext
+    private val helloService: HelloService
 ) {
 
     @GetMapping("/hello")
     fun hello(name: String?): String {
-        println(applicationContext)
-        return name?.let { helloService.sayHello(it) } ?: throw NullPointerException()
+
+        if(name.isNullOrBlank()) throw IllegalArgumentException()
+
+        return helloService.sayHello(name)
     }
 }
