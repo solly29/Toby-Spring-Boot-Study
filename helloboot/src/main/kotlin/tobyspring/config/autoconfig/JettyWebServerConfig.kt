@@ -5,17 +5,13 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory
 import org.springframework.context.annotation.*
 import org.springframework.core.type.AnnotatedTypeMetadata
+import org.springframework.util.ClassUtils
+import tobyspring.config.ConditionalMyOnClass
 import tobyspring.config.MyAutoConfig
 
 @MyAutoConfig
-@Conditional(JettyWebServerConfig.JettyCondition::class)
+@ConditionalMyOnClass("org.eclipse.jetty.server.Server")
 class JettyWebServerConfig {
-    class JettyCondition : Condition {
-        override fun matches(context: ConditionContext, metadata: AnnotatedTypeMetadata): Boolean {
-            return false
-        }
-    }
-
     @Bean("jettyWebServerFactory")
     fun servletWebServerFactory(): ServletWebServerFactory = JettyServletWebServerFactory()
 

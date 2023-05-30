@@ -4,17 +4,13 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory
 import org.springframework.context.annotation.*
 import org.springframework.core.type.AnnotatedTypeMetadata
+import org.springframework.util.ClassUtils
+import tobyspring.config.ConditionalMyOnClass
 import tobyspring.config.MyAutoConfig
 
 @MyAutoConfig
-@Conditional(TomcatWebServerConfig.TomcatCondition::class)
+@ConditionalMyOnClass("org.apache.catalina.startup.Tomcat")
 class TomcatWebServerConfig {
-    class TomcatCondition : Condition {
-        override fun matches(context: ConditionContext, metadata: AnnotatedTypeMetadata): Boolean {
-            return true
-        }
-    }
-
     @Bean("tomcatWebServerFactory")
     fun servletWebServerFactory(): ServletWebServerFactory = TomcatServletWebServerFactory()
 

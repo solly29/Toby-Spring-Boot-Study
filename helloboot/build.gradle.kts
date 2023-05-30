@@ -16,13 +16,16 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-web") {
+        // 해당 라이브러리에서 특정 의존성 삭제
+//        exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
+    }
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation("org.springframework.boot:spring-boot-starter-jetty")
+//    implementation("org.springframework.boot:spring-boot-starter-jetty")
 }
 
 tasks.withType<KotlinCompile> {
