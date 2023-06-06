@@ -16,7 +16,7 @@ class HelloApiTest {
 
         val rest = TestRestTemplate()
 
-        val res: ResponseEntity<String> = rest.getForEntity("http://localhost:8080/hello?name={name}", String::class.java, "Spring")
+        val res: ResponseEntity<String> = rest.getForEntity("http://localhost:9090/app/hello?name={name}", String::class.java, "Spring")
 
         // 검증
         // status code 200
@@ -36,7 +36,7 @@ class HelloApiTest {
 
         val rest = TestRestTemplate()
 
-        val res: ResponseEntity<String> = rest.getForEntity("http://localhost:8080/hello?name=", String::class.java)
+        val res: ResponseEntity<String> = rest.getForEntity("http://localhost:9090/app/hello?name=", String::class.java)
 
         // 검증
         // status code 200
