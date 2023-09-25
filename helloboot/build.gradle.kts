@@ -3,8 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "2.7.6"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
-    kotlin("jvm") version "1.5.31"
-    kotlin("plugin.spring") version "1.5.31"
+    kotlin("jvm") version "1.7.21"
+    kotlin("plugin.spring") version "1.7.21"
+    id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
 group = "tobyspring"
@@ -37,4 +38,19 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+kover {
+    htmlReport {
+        onCheck.set(true)
+    }
+    verify {
+        rule {
+            isEnabled = true
+            name = "Coverage must be more then 60%"
+            bound {
+                minValue = 30
+            }
+        }
+    }
 }
